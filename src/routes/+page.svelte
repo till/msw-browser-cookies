@@ -1,6 +1,6 @@
 <script>
     import {Configuration, FrontendApi} from '@ory/client'
-  import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
 
     const config = new Configuration({
         basePath: 'http://localhost:4000',
@@ -160,17 +160,27 @@ pre {
 }
 .container {
     display: flex;
+    flex-wrap: wrap;
 }
-.container div {
+.break {
+    height:0;
+    flex-basis:100%;
+}
+.item {
     flex: 1;
-    padding: 10px;
+    margin: 2px;
+    padding: 5px;
     border: 2px solid green;
+}
+
+.item-wide {
+    flex: 2;
 }
 </style>
 <h1>MSW Example</h1>
 
 <div class="container">
-    <div>
+    <div class="item">
     {#if loginStatusIndicator}
         You are logged in!
         {#await getLogoutLink()}
@@ -230,7 +240,7 @@ pre {
         </div>
     {/if}
     </div>
-    <div>
+    <div class="item">
         <h2>async request</h2>
         <div>
         {#await mockBin()}
@@ -251,5 +261,9 @@ pre {
             </pre>
         {/await}
         </div>
+    </div>
+    <div class="break"></div>
+    <div class="item item-wide">
+        Mocking here!
     </div>
 </div>

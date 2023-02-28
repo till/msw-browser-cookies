@@ -144,6 +144,14 @@
         }
     }
 
+    /**
+     * @returns {Promise<Object>}
+     */
+    async function mockItLikeItsReal() {
+        const response = await fetch('/this-does-not-exist')
+        return response.json()
+    }
+
     onMount(async() => {
         loginStatusIndicator = await loginStatus()
     })
@@ -202,12 +210,10 @@ pre {
     {#if loginFlow && !accountResponse}
         <div>
             <h2>Step 1/1: Here's the flow</h2>
-            <pre>
-                {prettyJson(loginFlow)}
-            </pre>
-            <pre>
-                {prettyJson(csrfToken)}
-            </pre>
+            <pre>{prettyJson(loginFlow)}</pre>
+
+            <h3>... &amp; the csrf token</h3>
+            <pre>{prettyJson(csrfToken)}</pre>
         </div>
 
         <div>
@@ -234,9 +240,7 @@ pre {
             <p>
                 <a href="/" rel="external">Reload!</a>
             </p>
-            <pre>
-                {prettyJson(accountResponse)}
-            </pre>
+            <pre>{prettyJson(accountResponse)}</pre>
         </div>
     {/if}
     </div>
@@ -247,13 +251,9 @@ pre {
             ... loading mockbin
         {:then response}
             <h3>headers</h3>
-            <pre>
-                {prettyJson(response.headers)}
-            </pre>
+            <pre>{prettyJson(response.headers)}</pre>
             <h3>postData</h3>
-            <pre>
-                {prettyJson(response.postData)}
-            </pre>
+            <pre>{prettyJson(response.postData)}</pre>
         {:catch exception}
             An error occurred (DNS, network?):
             <pre class="error">
@@ -264,6 +264,13 @@ pre {
     </div>
     <div class="break"></div>
     <div class="item item-wide">
-        Mocking here!
+        <h2>Mocking here!</h2>
+        {#await mockItLikeItsReal()}
+            ...mocking with MSW
+        {:then something}
+        <pre>{prettyJson(something)}</pre>
+        {:catch exception}
+        <pre class="error">{prettyJson(exception)}</pre>
+        {/await}
     </div>
 </div>
